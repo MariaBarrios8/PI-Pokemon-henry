@@ -1,11 +1,11 @@
-import React from "react";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, Fragment } from "react";
 import {useDispatch, useSelector} from 'react-redux'
-import { getPokemons } from "../../actions";
+import { getPokemons, orderPokesByName, orderByAttack, getTypes, filterByType, filterCreated } from "../../actions";
 import {Link} from 'react-router-dom'
 import Card from "../Card/Card";
 import Pagination from "../Pagination/Pagination";
 import SearchBar from "../SearchBar/SearchBar";
+import CreatePoke from "../CreatePoke/CreatePoke";
 import './home.css'
 
 
@@ -26,7 +26,7 @@ export default function Home() {
 
 
     const [order, setOrder] = useState("")
-    const [score, setScore] = useState("")
+    const [attack, setAttack] = useState("")
 
 
     const pagination = (pageNumber) => {
@@ -48,6 +48,9 @@ export default function Home() {
     }
     //paginado
 
+
+
+
     //carga de cartas
     useEffect(() => {
         dispatch(getPokemons())
@@ -59,11 +62,42 @@ export default function Home() {
         dispatch(getPokemons())
     }
 
+    //orden alfabético
+    function handleSort (e) {
+        e.preventDefault()
+        dispatch(orderPokesByName(e.target.value))
+        setCurrentPage(1)
+        setOrder(`${e.target.value}`)
+    }
+
+    //orden por puntos de ataque
+    function handleAttack(e) {
+        e.preventDefault()
+        dispatch(orderByAttack(e.target.value))
+        setCurrentPage(1)
+        setAttack(`${e.target.value}`)
+
+    }
+
+    //filtro por tipos
+    function handleFilterByTypes(e) {
+        e.preventDefault()
+        dispatch(filterByType(e.target.value))
+    }
+
+    //filtro por creado o no
+    function handleFilterCreated(e) {
+        dispatch(filterCreated(e.target.value))
+        setCurrentPage(1)
+    }
+
 
 
     return (
         <div>
-            <Link>Create a Pokemon</Link>
+            <Link className="pokePokeCreate" to='/home/create'>
+                <button>Create a Pokemon</button>
+            </Link>
             <h1>Henry Poke-Proyect</h1>
             <button onClick={(e) => {
                 handleClick(e)
@@ -72,14 +106,30 @@ export default function Home() {
             </button>
 
             <div>
-                <select className="Orden alfabetico">
+                <select className="Orden alfabetico" onChange={e => handleSort(e)}>
                     <option hidden="AllThePokemons">Alphabetical order</option>
                     <option value="asc">A - Z order</option>
                     <option value="des">Z - A order</option>
                 </select>
+                <select className="AttackScore" onChange={e => handleAttack(e)}>
+                    <option hidden="attack">Order by AP</option>
+                    <option value="high">Higher AP first</option>
+                    <option value="low">Lower AP first</option>
+                </select>
+                <select className="Types" onChange={(e) => handleFilterByTypes(e)}>
+                    <option hidden="noOrder">Filter by types</option>
+                    {types.map((e) => {
+                        <option key={e.id} value={e.name}>{e.name}</option>
+                    })}
+                </select>
+                <select className="pokemons" onChange={e => handleFilterCreated(e)}>
+                <option hidden="allpokes">Filter by creation</option>
+                    <option value="api">Real pokemons</option>
+                    <option value="user">Fanmade pokemons</option>
+                </select>
                 <Pagination
                 pokesPerPage={pokesPerPage}
-                allPokes={allPokes.length} //necesito un valor
+                allPokes={allPokes.length} //necesito un valor numerico
                 pagination={pagination}
                 prevPage={prevPage}
                 nextPage={nextPage}
@@ -88,12 +138,17 @@ export default function Home() {
                 <div className="pokeCard">
                     {currentPokes?.map((el) => {
                         return (
+                            <Fragment>
+                            <div className="dataCard">
                             <Card 
                             img={el.img}
                             name={el.name}
                             types={el.types}
+                            attack={el.attack}
                             key={el.id}
                             />
+                            </div>
+                            </Fragment>
                         )
                     })}
                 </div>

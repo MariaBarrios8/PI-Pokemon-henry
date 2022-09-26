@@ -24,8 +24,8 @@ export default function Pagination({
           </button>
         ))}
       </ul>
-      <button className="backButton" onClick={prevPage}>Back</button>
-      <button className="advanceButton" onClick={nextPage}>Next</button>
+      {/*<button className="backButton" onClick={prevPage}>Back</button>
+      <button className="advanceButton" onClick={nextPage}>Next</button>*/}
     </nav>
   );
 }

@@ -1,13 +1,21 @@
 import React from "react";
+import { Link } from 'react-router-dom'
 
 
 
-export default function Card({img, name, types}) {
+export default function Card({img, name, types, id, attack}) {
     return (
-        <div>
-            <img src={img} alt='image not found' width='250px' height='250' />
-            <h3>{name}</h3>
-            <h5>Type: {types.map(e => e.name + "- ")}</h5>
+        <div className="Card">
+            <img className="pokeImg" src={img} alt='image not found' width='250px' height='250' />
+            <div className="CardBody">
+            <h1 className="pokemon">{name}</h1>
+            <h3 className="types">Type: {types.map(e => e.name + " ")}</h3>
+            <h3>Attack points: {attack}</h3>
+            <br></br>
+            <Link to='home/:id'>
+            <button>Read more</button>
+            </Link>
+            </div>
         </div>
     )
 }
