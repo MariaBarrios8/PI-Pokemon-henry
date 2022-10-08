@@ -12,7 +12,7 @@ export default function Card({img, name, types, id, attack}) {
             <h3 className="types">Type: {types.map(e => e.name + " ")}</h3>
             <h3>Attack points: {attack}</h3>
             <br></br>
-            <Link to='home/:id'>
+            <Link to={`/${id}`}>
             <button>Read more</button>
             </Link>
             </div>

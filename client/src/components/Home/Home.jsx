@@ -14,7 +14,7 @@ export default function Home() {
     const dispatch = useDispatch() //A hook to access the redux dispatch function.
     const allPokes = useSelector((state) => state.pokemons)
 
-    const types = useSelector((state) => state.types)
+    //const pokiTypes = useSelector((state) => state.allTypes)
 
 
     //paginado
@@ -56,6 +56,10 @@ export default function Home() {
         dispatch(getPokemons())
     }, [dispatch])
 
+    useEffect(() => {
+        dispatch(getTypes())
+    }, [dispatch])
+
     //reseteo
     function handleClick(e) {
         e.preventDefault();
@@ -95,8 +99,8 @@ export default function Home() {
 
     return (
         <div>
-            <Link className="pokePokeCreate" to='/home/create'>
-                <button>Create a Pokemon</button>
+            <Link to='/home/create'>
+                <button  className="pokePokeCreate" >Create a Pokemon</button>
             </Link>
             <h1>Henry Poke-Proyect</h1>
             <button onClick={(e) => {
@@ -116,17 +120,42 @@ export default function Home() {
                     <option value="high">Higher AP first</option>
                     <option value="low">Lower AP first</option>
                 </select>
-                <select className="Types" onChange={(e) => handleFilterByTypes(e)}>
-                    <option hidden="noOrder">Filter by types</option>
-                    {types.map((e) => {
+               {/*<select className="Types" onChange={(e) => handleFilterByTypes(e)}>
+                    <option hidden="all">Filter by types</option>
+                    {pokiTypes.map((e) => {
                         <option key={e.id} value={e.name}>{e.name}</option>
                     })}
+                </select>*/}
+                <select className="Types" onChange={(e) => handleFilterByTypes(e)}>
+                    <option disable>Filter by types</option>
+                    <option value="all">all</option>
+                    <option value="normal">normal</option>
+                    <option value="fighting">fighting</option>
+                    <option value="flying">flying</option>
+                    <option value="poison">poison</option>
+                    <option value="ground">ground</option>
+                    <option value="rock">rock</option>
+                    <option value="bug">bug</option>
+                    <option value="ghost">ghost</option>
+                    <option value="steel">steel</option>
+                    <option value="fire">fire</option>
+                    <option value="water">water</option>
+                    <option value="grass">grass</option>
+                    <option value="electric">electric</option>
+                    <option value="psychic">psychic</option>
+                    <option value="ice">ice</option>
+                    <option value="dragon">dragon</option>
+                    <option value="dark">dark</option>
+                    <option value="fairy">fairy</option>
+                    <option value="unknown">unknown</option>
+                    <option value="shadow">shadow</option>
                 </select>
-                <select className="pokemons" onChange={e => handleFilterCreated(e)}>
+                <select className="pokemonsFilter" onChange={e => handleFilterCreated(e)}>
                 <option hidden="allpokes">Filter by creation</option>
                     <option value="api">Real pokemons</option>
                     <option value="user">Fanmade pokemons</option>
                 </select>
+                <div className="paginado">
                 <Pagination
                 pokesPerPage={pokesPerPage}
                 allPokes={allPokes.length} //necesito un valor numerico
@@ -134,6 +163,7 @@ export default function Home() {
                 prevPage={prevPage}
                 nextPage={nextPage}
                 />
+                </div>
                 <SearchBar />
                 <div className="pokeCard">
                     {currentPokes?.map((el) => {
@@ -153,6 +183,9 @@ export default function Home() {
                     })}
                 </div>
             </div>
+            <Link to='/home/create'>
+                <button  className="pokePokeCreate" >Create a Pokemon</button>
+            </Link>
         </div>
     )
 }

@@ -1,9 +1,14 @@
+import { getPokemons, getTypes } from "../actions";
+import { exportable } from "../lawea";
+
 const initialState = {
   pokemons: [],
   allPokemons: [],
   types: [],
-  details: []
+  details: [],
+  allTypes: []
 };
+
 
 function rootReducer(state = initialState, action) {
   switch (action.type) {
@@ -70,10 +75,33 @@ function rootReducer(state = initialState, action) {
     case "GET_TYPES":
       return {
         ...state,
-        types: action.payload,
+        allTypes: action.payload,
       };
     case 'FILTER_BY_TYPE':
-        const pokesAll = state.allPokemons;
+    return {
+            ...state,
+            pokemons: exportable(state.allPokemons, action.payload)
+            /*filterByType(state.allPokemons, action.payload)*/
+        }
+      /*const allPokes2 = state.pokemons;
+      console.log(allPokes2, "LA WEA !")
+      const typeFilter =
+        action.payload === "all"
+          ? allPokes2
+          : allPokes2.filter((e) => {
+            e.types.includes((action.payload) === true)
+          }) */
+        /*const pokewea = state.pokemons
+        console.log(pokewea, "el filter")
+        const filter = 
+        action.payload === "all"
+        ? pokewea
+        : pokewea.filter((e) => {
+          e.types.map(e => e.name).includes(action.payload)
+
+        })*/
+          
+        /*const pokesAll = state.allPokemons;
         const typePoke =pokesAll.filter((poke) => {
             if(poke.types) {
                 const type = poke.types.map((p) => p.name)
@@ -87,7 +115,7 @@ function rootReducer(state = initialState, action) {
         return {
             ...state,
             pokemons: action.payload === "Types" ? pokesAll : typePoke
-        }
+        }*/
     case "FILTER_CREATED":  
       const allPokes = state.pokemons;
       const createdFilter =
